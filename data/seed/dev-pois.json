@@ -1,0 +1,273 @@
+{
+  "regions": [
+    {
+      "id": "DEV_QINGHE",
+      "name": "Qinghe (DEV fixtures)",
+      "fixture": true,
+      "center": [0.0, 0.0],
+      "bounds": [[-0.115, -0.118], [0.126, 0.112]]
+    }
+  ],
+  "pois": [
+    {
+      "id": "DEV_QH_CHEST_001",
+      "name": "DEV Riverside Supply Chest",
+      "category": "chest",
+      "region_id": "DEV_QINGHE",
+      "subregion": "DEV West Bank",
+      "coordinates": [-0.071, -0.011],
+      "floor": "B1",
+      "entrance": "DEV cave opening on the north riverbank",
+      "entrance_coordinates": [-0.079, -0.004],
+      "nearest_landmark": "DEV Timber Footbridge",
+      "requirements": ["DEV Fire Arrow"],
+      "navigation_steps": [
+        "Start at the DEV Timber Footbridge and follow the river west.",
+        "Use the cave opening at water level instead of descending from the ridge.",
+        "Follow the left tunnel to the lower chamber."
+      ],
+      "solution_steps": [
+        "Clear the DEV training enemies in the chamber.",
+        "Use the DEV Fire Arrow on the marked vines.",
+        "Open the fixture chest behind the stone screen."
+      ],
+      "common_mistake": "The fixture cannot be reached from the cliff directly above it.",
+      "status": "not_completed",
+      "provenance": {
+        "source": "Project-owned development fixture",
+        "source_type": "dev_fixture",
+        "verification_status": "fixture",
+        "patch_version": "dev-2026-09"
+      }
+    },
+    {
+      "id": "DEV_QH_CHEST_002",
+      "name": "DEV Watchtower Chest",
+      "category": "chest",
+      "region_id": "DEV_QINGHE",
+      "subregion": "DEV Northern Rise",
+      "coordinates": [-0.038, 0.051],
+      "floor": "Surface",
+      "entrance": "DEV broken stair on the east face",
+      "entrance_coordinates": [-0.033, 0.046],
+      "nearest_landmark": "DEV Signal Tower",
+      "requirements": [],
+      "navigation_steps": [
+        "Approach the DEV Signal Tower from the east path.",
+        "Climb the broken exterior stair and cross the timber beam."
+      ],
+      "solution_steps": [
+        "Defeat the fixture guard at the upper platform.",
+        "Open the chest beside the signal brazier."
+      ],
+      "common_mistake": "The west wall is decorative and has no climb route.",
+      "status": "not_completed",
+      "provenance": {
+        "source": "Project-owned development fixture",
+        "source_type": "dev_fixture",
+        "verification_status": "fixture",
+        "patch_version": "dev-2026-09"
+      }
+    },
+    {
+      "id": "DEV_QH_CHEST_003",
+      "name": "DEV Sunken Courtyard Chest",
+      "category": "chest",
+      "region_id": "DEV_QINGHE",
+      "subregion": "DEV Reed Basin",
+      "coordinates": [0.071, -0.039],
+      "floor": "B2",
+      "entrance": "DEV well behind the ruined courtyard",
+      "entrance_coordinates": [0.059, -0.031],
+      "nearest_landmark": "DEV Reed Gate",
+      "requirements": ["DEV Courtyard Key"],
+      "navigation_steps": [
+        "Enter the DEV Reed Gate courtyard from the southern path.",
+        "Drop through the marked well and take the second ladder down."
+      ],
+      "solution_steps": [
+        "Unlock the fixture grate with the DEV Courtyard Key.",
+        "Drain the shallow room with the nearby lever.",
+        "Open the chest on the lower stone shelf."
+      ],
+      "common_mistake": "The first underground room is B1. Continue down to B2.",
+      "status": "not_completed",
+      "provenance": {
+        "source": "Project-owned development fixture",
+        "source_type": "dev_fixture",
+        "verification_status": "fixture",
+        "patch_version": "dev-2026-09"
+      }
+    },
+    {
+      "id": "DEV_QH_ODDITY_001",
+      "name": "DEV Wind Bell Oddity",
+      "category": "oddity",
+      "region_id": "DEV_QINGHE",
+      "subregion": "DEV Willow Terrace",
+      "coordinates": [0.019, 0.061],
+      "floor": "Surface",
+      "entrance": "DEV upper terrace path",
+      "nearest_landmark": "DEV Twin Willows",
+      "requirements": [],
+      "navigation_steps": [
+        "Follow the terrace path north from the DEV Twin Willows.",
+        "Look for the bell hanging under the final wooden arch."
+      ],
+      "solution_steps": [
+        "Interact with the three fixture chimes from lowest to highest.",
+        "Collect the revealed oddity beneath the center arch."
+      ],
+      "common_mistake": "Do not strike the large bell first. It resets the fixture sequence.",
+      "status": "not_completed",
+      "provenance": {
+        "source": "Project-owned development fixture",
+        "source_type": "dev_fixture",
+        "verification_status": "fixture",
+        "patch_version": "dev-2026-09"
+      }
+    },
+    {
+      "id": "DEV_QH_ODDITY_002",
+      "name": "DEV Moss Stone Oddity",
+      "category": "oddity",
+      "region_id": "DEV_QINGHE",
+      "subregion": "DEV Eastern Shelf",
+      "coordinates": [0.088, 0.042],
+      "floor": "Surface",
+      "entrance": "DEV ridge trail from the south",
+      "nearest_landmark": "DEV Three Pines",
+      "requirements": ["DEV Observation skill"],
+      "navigation_steps": [
+        "Take the ridge trail north from the DEV Three Pines.",
+        "Stop at the moss-covered stones above the path."
+      ],
+      "solution_steps": [
+        "Use the DEV Observation skill to reveal the correct stone.",
+        "Inspect the highlighted carving."
+      ],
+      "common_mistake": "The bright stone beside the path is a decoy fixture.",
+      "status": "not_completed",
+      "provenance": {
+        "source": "Project-owned development fixture",
+        "source_type": "dev_fixture",
+        "verification_status": "fixture",
+        "patch_version": "dev-2026-09"
+      }
+    },
+    {
+      "id": "DEV_QH_PUZZLE_001",
+      "name": "DEV Lantern Alignment",
+      "category": "puzzle",
+      "region_id": "DEV_QINGHE",
+      "subregion": "DEV Central Crossing",
+      "coordinates": [-0.012, 0.008],
+      "floor": "Surface",
+      "entrance": "DEV courtyard gate",
+      "nearest_landmark": "DEV Stone Crossing",
+      "requirements": [],
+      "navigation_steps": [
+        "Cross the DEV Stone Crossing and enter the courtyard to the north.",
+        "The four lantern stands surround the central tile."
+      ],
+      "solution_steps": [
+        "Rotate each fixture lantern toward the central tile.",
+        "Stand on the tile after all four beams meet."
+      ],
+      "common_mistake": "One lantern is on the roof edge, not at ground level.",
+      "status": "not_completed",
+      "provenance": {
+        "source": "Project-owned development fixture",
+        "source_type": "dev_fixture",
+        "verification_status": "fixture",
+        "patch_version": "dev-2026-09"
+      }
+    },
+    {
+      "id": "DEV_QH_PUZZLE_002",
+      "name": "DEV Echo Chamber",
+      "category": "puzzle",
+      "region_id": "DEV_QINGHE",
+      "subregion": "DEV Western Hollow",
+      "coordinates": [-0.085, 0.032],
+      "floor": "B1",
+      "entrance": "DEV narrow gap behind the waterfall",
+      "entrance_coordinates": [-0.091, 0.025],
+      "nearest_landmark": "DEV Veil Falls",
+      "requirements": [],
+      "navigation_steps": [
+        "Descend to the pool below the DEV Veil Falls.",
+        "Walk through the narrow gap behind the falling water."
+      ],
+      "solution_steps": [
+        "Repeat the fixture tones in the order shown by the wall lights.",
+        "Use the opened passage to collect the completion token."
+      ],
+      "common_mistake": "The upper cave is not connected to the puzzle chamber.",
+      "status": "not_completed",
+      "provenance": {
+        "source": "Project-owned development fixture",
+        "source_type": "dev_fixture",
+        "verification_status": "fixture",
+        "patch_version": "dev-2026-09"
+      }
+    },
+    {
+      "id": "DEV_QH_QUEST_001",
+      "name": "DEV Ferryman Request",
+      "category": "quest",
+      "region_id": "DEV_QINGHE",
+      "subregion": "DEV South Ferry",
+      "coordinates": [0.025, -0.072],
+      "floor": "Surface",
+      "entrance": "DEV ferry landing",
+      "nearest_landmark": "DEV South Ferry Bell",
+      "requirements": ["DEV River Token"],
+      "navigation_steps": [
+        "Follow the river path south to the DEV ferry landing.",
+        "Speak to the fixture ferryman beside the moored boat."
+      ],
+      "solution_steps": [
+        "Give the ferryman the DEV River Token.",
+        "Complete the short fixture delivery across the river.",
+        "Return to the landing for the quest completion."
+      ],
+      "common_mistake": "The quest remains incomplete until you return to the original landing.",
+      "status": "not_completed",
+      "provenance": {
+        "source": "Project-owned development fixture",
+        "source_type": "dev_fixture",
+        "verification_status": "fixture",
+        "patch_version": "dev-2026-09"
+      }
+    },
+    {
+      "id": "DEV_QH_QUEST_002",
+      "name": "DEV Herbalist Trail",
+      "category": "quest",
+      "region_id": "DEV_QINGHE",
+      "subregion": "DEV Eastern Meadow",
+      "coordinates": [0.093, -0.002],
+      "floor": "Surface",
+      "entrance": "DEV meadow footpath",
+      "nearest_landmark": "DEV Red Canopy",
+      "requirements": ["DEV Ferryman Request complete"],
+      "navigation_steps": [
+        "Take the meadow path east from the DEV Red Canopy.",
+        "Find the fixture herbalist beside the low stone wall."
+      ],
+      "solution_steps": [
+        "Collect three marked DEV herbs along the meadow edge.",
+        "Return them to the fixture herbalist."
+      ],
+      "common_mistake": "The required herbs appear only after the prerequisite fixture quest.",
+      "status": "not_completed",
+      "provenance": {
+        "source": "Project-owned development fixture",
+        "source_type": "dev_fixture",
+        "verification_status": "fixture",
+        "patch_version": "dev-2026-09"
+      }
+    }
+  ]
+}
