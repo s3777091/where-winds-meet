@@ -12,6 +12,25 @@ Browser at localhost:3199
      -> OpenRouter only for user-requested screenshot analysis
 ```
 
+## Hosted assistant
+
+The hosted deployment keeps each project boundary explicit:
+
+```text
+map.protexa.cloud
+  -> Caddy
+  -> Next.js web
+     -> isolated Go map API
+     -> isolated knowledge API
+        -> isolated wwm-neo4j container
+        -> OpenRouter only after retrieval
+  -> existing Supabase Kong only for /auth/v1 session validation
+```
+
+The Where Winds Meet stack has its own Docker network, volumes, container names, and Neo4j instance. It does not reuse the existing `neo4j-db` container. The only shared service is Supabase Auth through its public Kong API; the application never connects directly to the shared Postgres database.
+
+Knowledge ingestion reads public, robots-allowed pages from `windsmeet.wiki` and `windsmeetguide.com`, plus the public WWM Compendium JSON endpoint. It records source URLs, aliases, topics, regions, version flags, and cross-page references in Neo4j. Chat retrieval uses Neo4j full-text search plus graph neighbors. The model receives only retrieved excerpts, must cite `[S1]` style source identifiers, and falls back to a source list when citations are missing or invalid.
+
 Next.js owns the UI. Go owns POIs, progress, routes, settings, import/export, official-data refresh, the constrained tile proxy, AI calls, and the analysis cache. The browser cannot read the OpenRouter key.
 
 ## Map

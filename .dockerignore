@@ -1,0 +1,14 @@
+.git
+.github
+.tools
+**/.next
+**/node_modules
+**/__pycache__
+**/.pytest_cache
+coverage
+data/kb
+data/local
+*.log
+.env
+.env.*
+!deploy/.env.example

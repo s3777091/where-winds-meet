@@ -1,0 +1,135 @@
+name: where-winds-meet
+
+services:
+  neo4j:
+    image: neo4j:5.26-community
+    container_name: wwm-neo4j
+    restart: unless-stopped
+    environment:
+      NEO4J_AUTH: neo4j/${NEO4J_PASSWORD:?Set NEO4J_PASSWORD in deploy/.env}
+      WWM_NEO4J_PASSWORD: ${NEO4J_PASSWORD}
+      NEO4J_server_bolt_advertised__address: neo4j.protexa.cloud:443
+      NEO4J_server_memory_heap_initial__size: 384M
+      NEO4J_server_memory_heap_max__size: 768M
+      NEO4J_server_memory_pagecache_size: 512M
+    ports:
+      - "127.0.0.1:17474:7474"
+      - "127.0.0.1:17687:7687"
+    volumes:
+      - wwm_neo4j_data:/data
+      - wwm_neo4j_logs:/logs
+    healthcheck:
+      test: ["CMD-SHELL", "cypher-shell -a bolt://127.0.0.1:7687 -u neo4j -p \"$$WWM_NEO4J_PASSWORD\" 'RETURN 1' >/dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 35s
+    networks:
+      - wwm_internal
+
+  knowledge:
+    build:
+      context: ..
+      dockerfile: services/knowledge/Dockerfile
+    container_name: wwm-knowledge
+    restart: unless-stopped
+    environment:
+      NEO4J_URI: bolt://neo4j:7687
+      NEO4J_USERNAME: neo4j
+      NEO4J_PASSWORD: ${NEO4J_PASSWORD}
+      SUPABASE_URL: ${SUPABASE_INTERNAL_URL:-http://supabase-kong:8000}
+      SUPABASE_PUBLISHABLE_KEY: ${NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
+      OPENROUTER_MODEL: ${OPENROUTER_MODEL:-google/gemini-2.5-flash-lite}
+    ports:
+      - "127.0.0.1:13210:3210"
+    depends_on:
+      neo4j:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:3210/health', timeout=5)"]
+      interval: 15s
+      timeout: 6s
+      retries: 12
+      start_period: 20s
+    networks:
+      - wwm_internal
+      - supabase
+
+  api:
+    build:
+      context: ..
+      dockerfile: services/api/Dockerfile
+    container_name: wwm-api
+    restart: unless-stopped
+    environment:
+      WWM_API_ADDR: 0.0.0.0:3200
+      WWM_WEB_ORIGIN: https://map.protexa.cloud
+      WWM_DATA_SOURCE: official
+      WWM_STATE_FILE: /app/data/local/player-state.json
+      WWM_OFFICIAL_CACHE_FILE: /app/data/local/official-map-cache.json
+      WWM_GUIDE_FILE: /app/data/guides/verified-poi-guides.json
+      WWM_KB_VERSION: graph-rag-v1
+      AI_ANALYSIS_ENABLED: "true"
+      AI_PROVIDER: openrouter
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
+      OPENROUTER_MODEL: ${OPENROUTER_MODEL:-google/gemini-2.5-flash-lite}
+    ports:
+      - "127.0.0.1:13200:3200"
+    volumes:
+      - wwm_app_state:/app/data/local
+    healthcheck:
+      test: ["CMD", "/app/wwm-api", "--healthcheck"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    networks:
+      - wwm_internal
+
+  web:
+    build:
+      context: ..
+      dockerfile: apps/web/Dockerfile
+      args:
+        NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL:-https://map.protexa.cloud}
+        NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY}
+    container_name: wwm-web
+    restart: unless-stopped
+    environment:
+      CORE_API_URL: http://api:3200
+      KNOWLEDGE_API_URL: http://knowledge:3210
+      NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL:-https://map.protexa.cloud}
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY}
+      SUPABASE_INTERNAL_URL: ${SUPABASE_INTERNAL_URL:-http://supabase-kong:8000}
+    ports:
+      - "127.0.0.1:13199:3199"
+    depends_on:
+      api:
+        condition: service_healthy
+      knowledge:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3199/login').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 15s
+      timeout: 6s
+      retries: 12
+      start_period: 30s
+    networks:
+      - wwm_internal
+      - supabase
+
+networks:
+  wwm_internal:
+    name: wwm_internal
+  supabase:
+    external: true
+    name: supabase_default
+
+volumes:
+  wwm_neo4j_data:
+    name: wwm_neo4j_data
+  wwm_neo4j_logs:
+    name: wwm_neo4j_logs
+  wwm_app_state:
+    name: wwm_app_state

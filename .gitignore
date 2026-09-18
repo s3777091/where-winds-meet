@@ -7,6 +7,10 @@ coverage/
 .env.local
 .tools/
 data/local/
+data/kb/
+__pycache__/
+*.py[cod]
+.pytest_cache/
 services/api/bin/
 *.exe
 .DS_Store

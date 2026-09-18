@@ -24,6 +24,7 @@ import { CATEGORY_COLORS, CATEGORY_LABELS, getNextPOI, progressSummary, regionLa
 import type { CompletionStatus, POICategory, ProgressExport, RouteResult } from "@/lib/types";
 import { useCompanionStore } from "@/store/use-companion-store";
 import { CompanionMap } from "./companion-map";
+import { KnowledgeChat } from "./knowledge-chat";
 import { POIIcon } from "./poi-icon";
 import { POIDetail } from "./poi-detail";
 import { Sidebar } from "./sidebar";
@@ -550,6 +551,7 @@ export function CompanionApp() {
           </div>
         )}
       </section>
+      <KnowledgeChat />
     </main>
   );
 }

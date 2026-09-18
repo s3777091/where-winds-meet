@@ -2,14 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  async rewrites() {
-    return [
-      {
-        source: "/api/:path*",
-        destination: "http://127.0.0.1:3200/api/:path*",
-      },
-    ];
-  },
+  output: "standalone",
 };
 
 export default nextConfig;
