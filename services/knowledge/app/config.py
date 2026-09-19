@@ -17,6 +17,10 @@ class Settings(BaseSettings):
     supabase_publishable_key: str = ""
     auth_disabled: bool = False
 
+    openai_api_key: str = ""
+    openai_base_url: str = "https://api.openai.com/v1"
+    openai_model: str = "gpt-4.1-mini"
+
     openrouter_api_key: str = ""
     openrouter_base_url: str = "https://openrouter.ai/api/v1"
     openrouter_model: str = "google/gemini-2.5-flash-lite"

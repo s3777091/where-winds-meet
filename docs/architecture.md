@@ -23,7 +23,7 @@ map.protexa.cloud
      -> isolated Go map API
      -> isolated knowledge API
         -> isolated wwm-neo4j container
-        -> OpenRouter only after retrieval
+        -> OpenAI-compatible model only after retrieval
   -> existing Supabase Kong only for /auth/v1 session validation
 ```
 
@@ -31,7 +31,7 @@ The Where Winds Meet stack has its own Docker network, volumes, container names,
 
 Knowledge ingestion reads public, robots-allowed pages from `windsmeet.wiki` and `windsmeetguide.com`, plus the public WWM Compendium JSON endpoint. It records source URLs, aliases, topics, regions, version flags, and cross-page references in Neo4j. Chat retrieval uses Neo4j full-text search plus graph neighbors. The model receives only retrieved excerpts, must cite `[S1]` style source identifiers, and falls back to a source list when citations are missing or invalid.
 
-Next.js owns the UI. Go owns POIs, progress, routes, settings, import/export, official-data refresh, the constrained tile proxy, AI calls, and the analysis cache. The browser cannot read the OpenRouter key.
+Next.js owns the UI. Go owns POIs, progress, routes, settings, import/export, official-data refresh, the constrained tile proxy, AI calls, and the analysis cache. Provider keys stay server-side and are never exposed to the browser.
 
 ## Map
 

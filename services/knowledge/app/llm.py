@@ -56,11 +56,26 @@ def _citations_are_valid(answer: str, document_count: int) -> bool:
 async def answer_question(settings: Settings, question: str, documents: list[RetrievedDocument]) -> str:
     if not documents:
         return _fallback(documents)
-    if not settings.openrouter_api_key:
+
+    if settings.openai_api_key:
+        api_key = settings.openai_api_key
+        base_url = settings.openai_base_url
+        model = settings.openai_model
+        provider_headers: dict[str, str] = {}
+    else:
+        api_key = settings.openrouter_api_key
+        base_url = settings.openrouter_base_url
+        model = settings.openrouter_model
+        provider_headers = {
+            "HTTP-Referer": "https://map.protexa.cloud",
+            "X-Title": "Where Winds Meet Companion",
+        }
+
+    if not api_key:
         return _fallback(documents)
 
     payload = {
-        "model": settings.openrouter_model,
+        "model": model,
         "temperature": 0.1,
         "max_tokens": 850,
         "messages": [
@@ -74,12 +89,11 @@ async def answer_question(settings: Settings, question: str, documents: list[Ret
     try:
         async with httpx.AsyncClient(timeout=settings.openrouter_timeout) as client:
             response = await client.post(
-                f"{settings.openrouter_base_url.rstrip('/')}/chat/completions",
+                f"{base_url.rstrip('/')}/chat/completions",
                 headers={
-                    "Authorization": f"Bearer {settings.openrouter_api_key}",
+                    "Authorization": f"Bearer {api_key}",
                     "Content-Type": "application/json",
-                    "HTTP-Referer": "https://map.protexa.cloud",
-                    "X-Title": "Where Winds Meet Companion",
+                    **provider_headers,
                 },
                 json=payload,
             )
