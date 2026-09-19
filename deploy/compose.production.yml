@@ -21,8 +21,8 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "cypher-shell -a bolt://127.0.0.1:7687 -u neo4j -p \"$$WWM_NEO4J_PASSWORD\" 'RETURN 1' >/dev/null || exit 1"]
       interval: 10s
-      timeout: 5s
-      retries: 20
+      timeout: 10s
+      retries: 30
       start_period: 35s
     networks:
       - wwm_internal
@@ -56,6 +56,14 @@ services:
       - wwm_internal
       - supabase
 
+  state-init:
+    image: busybox:1.37
+    container_name: wwm-state-init
+    command: ["sh", "-c", "chown -R 65532:65532 /data"]
+    restart: "no"
+    volumes:
+      - wwm_app_state:/data
+
   api:
     build:
       context: ..
@@ -78,6 +86,9 @@ services:
       - "127.0.0.1:13200:3200"
     volumes:
       - wwm_app_state:/app/data/local
+    depends_on:
+      state-init:
+        condition: service_completed_successfully
     healthcheck:
       test: ["CMD", "/app/wwm-api", "--healthcheck"]
       interval: 30s
