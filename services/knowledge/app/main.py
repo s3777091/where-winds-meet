@@ -46,8 +46,16 @@ async def chat(payload: ChatRequest, _: AuthenticatedUser = Depends(require_user
 
     answer = await answer_question(settings, payload.question, documents)
     cited = cited_documents(answer, documents)
+    cited_ids = {document.id for document in cited}
     sources = [
-        Source(id=document.id, title=document.title, url=document.url, source=document.source)
-        for document in cited
+        Source(
+            id=document.id,
+            citation=index,
+            title=document.title,
+            url=document.url,
+            source=document.source,
+        )
+        for index, document in enumerate(documents, start=1)
+        if document.id in cited_ids
     ]
     return ChatResponse(answer=answer, sources=sources)

@@ -12,6 +12,7 @@ class ChatRequest(BaseModel):
 
 class Source(BaseModel):
     id: str
+    citation: int
     title: str
     url: str
     source: str

@@ -13,6 +13,7 @@ import { createClient } from "@/utils/supabase/client";
 
 type ChatSource = {
   id: string;
+  citation?: number;
   title: string;
   url: string;
   source: string;
@@ -185,7 +186,9 @@ export function KnowledgeChat() {
                         >
                           <BookOpenText size={14} className="mt-0.5 shrink-0 text-[var(--accent)]" />
                           <span className="min-w-0">
-                            <span className="block font-semibold text-[var(--text)]">S{index + 1}. {source.title}</span>
+                            <span className="block font-semibold text-[var(--text)]">
+                              S{source.citation ?? index + 1}. {source.title}
+                            </span>
                             <span className="block truncate">{source.source}</span>
                           </span>
                         </a>
