@@ -5,7 +5,7 @@ from fastapi import Depends, FastAPI, HTTPException
 from .auth import AuthenticatedUser, require_user
 from .config import get_settings
 from .graph import GraphStore
-from .llm import answer_question
+from .llm import answer_question, cited_documents
 from .models import ChatRequest, ChatResponse, Source
 
 
@@ -45,8 +45,9 @@ async def chat(payload: ChatRequest, _: AuthenticatedUser = Depends(require_user
         raise HTTPException(status_code=503, detail="Kho tri thức chưa sẵn sàng.") from exc
 
     answer = await answer_question(settings, payload.question, documents)
+    cited = cited_documents(answer, documents)
     sources = [
         Source(id=document.id, title=document.title, url=document.url, source=document.source)
-        for document in documents
+        for document in cited
     ]
     return ChatResponse(answer=answer, sources=sources)

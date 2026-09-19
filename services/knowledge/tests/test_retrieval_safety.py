@@ -1,5 +1,6 @@
 from app.graph import _lucene_query, normalize_documents
-from app.llm import _citations_are_valid
+from app.llm import _citations_are_valid, cited_documents
+from app.models import RetrievedDocument
 
 
 def test_lucene_query_removes_punctuation_and_stop_words():
@@ -14,6 +15,22 @@ def test_citations_must_reference_supplied_context():
     assert _citations_are_valid("Làm theo thứ tự này. [S1]", 2)
     assert not _citations_are_valid("Nguồn không tồn tại. [S3]", 2)
     assert not _citations_are_valid("Không có trích nguồn.", 2)
+
+
+def test_only_cited_documents_are_returned_to_the_client():
+    documents = [
+        RetrievedDocument(
+            id=str(index),
+            title=f"Source {index}",
+            url=f"https://example.com/{index}",
+            source="test",
+            kind="guide",
+            content="content",
+        )
+        for index in range(1, 4)
+    ]
+    assert [document.id for document in cited_documents("Dùng nguồn [S3], rồi [S1]. [S3]", documents)] == ["3", "1"]
+    assert cited_documents("Chưa tìm thấy dữ liệu đủ chắc chắn.", documents) == []
 
 
 def test_normalization_deduplicates_and_compacts_content():

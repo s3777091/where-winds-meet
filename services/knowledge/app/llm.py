@@ -53,6 +53,18 @@ def _citations_are_valid(answer: str, document_count: int) -> bool:
     return all(1 <= citation <= document_count for citation in citations)
 
 
+def cited_documents(answer: str, documents: list[RetrievedDocument]) -> list[RetrievedDocument]:
+    selected: list[RetrievedDocument] = []
+    seen: set[int] = set()
+    for value in re.findall(r"\[S(\d+)]", answer):
+        index = int(value) - 1
+        if index < 0 or index >= len(documents) or index in seen:
+            continue
+        seen.add(index)
+        selected.append(documents[index])
+    return selected
+
+
 async def answer_question(settings: Settings, question: str, documents: list[RetrievedDocument]) -> str:
     if not documents:
         return _fallback(documents)
