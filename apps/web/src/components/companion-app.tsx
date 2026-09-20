@@ -104,6 +104,7 @@ export function CompanionApp() {
 
   const currentRegion = regionsQuery.data?.find((region) => region.id === activeRegionId);
   const activeRouteStart = routeStart ?? currentRegion?.center;
+  const visibleRouteStart = routeStart ?? (route ? currentRegion?.center : undefined);
 
   useEffect(() => {
     const regions = regionsQuery.data;
@@ -372,7 +373,7 @@ export function CompanionApp() {
           region={currentRegion}
           selectedPOIId={selectedPOIId}
           route={route}
-          startPoint={activeRouteStart}
+          startPoint={visibleRouteStart}
           pickingStart={pickingStart}
           dataLoading={poisQuery.isPending}
           panelOpen={panelOpen}

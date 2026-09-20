@@ -14,6 +14,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { isWaypointCategory, POIIcon } from "@/components/poi-icon";
+import { initialMapZoom } from "@/lib/map-viewport";
 import { CATEGORY_COLORS } from "@/lib/poi";
 import type { POI, Region, RouteResult } from "@/lib/types";
 
@@ -186,7 +187,7 @@ export function CompanionMap({
       container: containerRef.current,
       style: baseStyle(initialRegion),
       center: initialRegion.center,
-      zoom: initialRegion.initial_zoom ?? 10.2,
+      zoom: initialMapZoom(initialRegion.initial_zoom, window.innerWidth),
       minZoom: initialRegion.min_zoom ?? 7,
       maxZoom: initialRegion.max_zoom ?? 16,
       maxBounds: initialRegion.bounds,
@@ -248,7 +249,11 @@ export function CompanionMap({
     map.setMinZoom(region.min_zoom ?? 7);
     map.setMaxZoom(region.max_zoom ?? 16);
     map.setStyle(baseStyle(region), { diff: false });
-    map.easeTo({ center: region.center, zoom: region.initial_zoom ?? 10.2, duration: 900 });
+    map.easeTo({
+      center: region.center,
+      zoom: initialMapZoom(region.initial_zoom, window.innerWidth),
+      duration: 900,
+    });
     map.setMaxBounds(region.bounds);
 
     let timeout = 0;
@@ -397,6 +402,23 @@ export function CompanionMap({
     const frame = window.requestAnimationFrame(() => map.resize());
     return () => window.cancelAnimationFrame(frame);
   }, [panelOpen]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    const container = containerRef.current;
+    if (!map || !container || typeof ResizeObserver === "undefined") return;
+
+    let frame = 0;
+    const observer = new ResizeObserver(() => {
+      window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(() => map.resize());
+    });
+    observer.observe(container);
+    return () => {
+      observer.disconnect();
+      window.cancelAnimationFrame(frame);
+    };
+  }, [regionAvailable, retryKey]);
 
   return (
     <div className="relative h-full w-full" aria-label="Bản đồ hoàn thành tương tác">
